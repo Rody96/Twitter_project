@@ -4,6 +4,24 @@ const path = require('path');
 const index = require('./routes')
 const errorHandler = require('errorhandler');
 require('./database');
+const raygun = require('raygun');
+
+const raygunClient = new raygun.Client().init({
+    apiKey: process.env.API_KEY
+  });
+
+  raygunClient.user = function (req) {
+    if (req.user) {
+      return {
+        identifier: req.user.username,
+        email: req.user.email,
+        fullName: req.user.fullName,
+        firstName: req.user.firstName,
+        uuid: req.user.deviceID
+      };
+    }
+  }
+
 
 const app = express();
 module.exports = app;
